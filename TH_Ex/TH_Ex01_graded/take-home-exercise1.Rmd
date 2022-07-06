@@ -1,0 +1,181 @@
+---
+title: "Take-home Exercise 1"
+description: |
+  Pareto chart and Population Pyramid
+author:
+  - name: He Qiyun 
+    url: https://example.com/norajones
+    affiliation: SMU MITB (AI)
+    affiliation_url: https://scis.smu.edu.sg/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Introduction
+Tableau and R are both great tool for visualization.
+Below shows a Pareto chart for the 'Superstore-2021' data and Population Pyramid for 'respopagesextod2021' data, made using Tableau.
+
+![Pareto Chart](C:\qiyunhe\In-Class_Ex\In-class_Ex02\Pareto_chart.PNG){fig.width=30%,fig.height=30%}
+![Pareto Chart](C:\qiyunhe\In-Class_Ex\In-class_Ex02\Population pyramid.PNG){width=30%,height=30%}
+
+This exercise aims to produce similar graphs using R.
+
+## 1.1 Installing and Launching R Packages
+
+The list of packages required for this exercise are: **tidyverse**, **readxl** , **dplyr** and **ggplot2**
+Below code chunk installs the required packages and loads them onto RStudio environment.
+
+```{r}
+packages = c('tidyverse','readxl','dplyr','ggplot2')
+for(p in packages){
+ if(!require(p, character.only = T)){
+  install.packages(p)
+ }
+ library(p,character.only = T)
+ }
+```
+
+## 1.2 Sketch of Proposed Design
+![Pareto Chart](C:\qiyunhe\In-Class_Ex\In-class_Ex02\sketch.jpg){fig.width=30%,fig.height=30%}
+
+# 2.Data preparation and plotting for the first dataset: 'Superstore-2021.xls'
+
+## 2.1 Import the data
+
+The data is imported with sheet "Orders" and "Returns" stored in different variables.
+The two tables are joined using left_join function of **dpylr** package based on "Order ID".
+
+```{r}
+orders <- read_xls("data/Superstore-2021.xls", sheet = "Orders")
+returns <- read_xls("data/Superstore-2021.xls", sheet = "Returns")
+
+joined_tab <- left_join(returns, orders, by = c('Order ID'='Order ID'))
+joined_tab
+```
+
+## 2.2. Data Preprocessing
+
+To proceed, the number of distinct value in the 'Returned' and 'Sub-Category' columns are checked using
+the function unique().
+The output shows no null value or other weird values.
+
+```{r}
+unique(joined_tab$'Sub-Category')
+unique(joined_tab$Returned)
+```
+The code chunk below change char values of "Returned" to integer number 1 or 0, as well as changing the name of the "Sub-Category"
+column to "SubCategory".
+
+```{r}
+joined_tab$Returned<-ifelse(joined_tab$Returned=="Yes",1,0) 
+
+joined_tab <- joined_tab %>%
+  rename('SubCategory'='Sub-Category')
+colnames(joined_tab)
+```
+From the output below, we can see that "Returned" is numeric and name of "Sub-Category" is successfully changed.
+
+```{r}
+str(joined_tab)
+```
+To further process the data, group_by() function is used to create a new column "Count_of_Returns" that contains the total 
+count of returns for each sub-category.
+As what we are interested is in the cumulative values, cumsum() function is used to create another column "cumulative"
+that stores the percentage of the cumulative sum.
+
+```{r}
+#count the returns for each category
+SubCategory_grouped <- joined_tab %>% group_by(SubCategory) %>%
+                        summarise(Count_of_Returns = sum(Returned),
+                        .groups = 'drop')
+#order the data
+ordered_data <- SubCategory_grouped[order(SubCategory_grouped$Count_of_Returns, decreasing=TRUE),]
+
+#add the cumulative column
+ordered_data$cumulative <- cumsum(ordered_data$Count_of_Returns)/sum(ordered_data$Count_of_Returns) * 100
+
+view(ordered_data)
+```
+
+## 2.3. Plot the Pareto Chart
+
+Ggplot2 is used to plot the Pareto Chart.
+geom_bar(), geom_path() and geom_point() are used to plot the data on the chart.
+
+```{r}
+#plot the ggplot
+scale <- tail(ordered_data$cumulative, n=1)/head(ordered_data$Count_of_Returns, n=1)
+
+ordered_data$SubCategory = with(ordered_data, reorder(SubCategory, -Count_of_Returns))
+
+ggplot(ordered_data , aes(x= SubCategory)) +
+  
+  geom_bar( aes(y=Count_of_Returns), stat="identity", color="black", fill =   
+               'light blue') + 
+  geom_path(aes(y=cumulative/scale, group=1),colour="red", size=0.9) +
+  geom_point(aes(y=cumulative/scale, group=1),colour="red") +
+  
+  scale_y_continuous(
+    # Features of the first y-axis
+    name = "Count of Returns",
+    # Add second y-axis and specify its features
+    sec.axis = sec_axis(~ .*scale, name="% of Total Running Sum of Count of Returns")
+  ) + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  labs(title="Pareto Chart", subtitle="Count of Returns for Sub-Categoty",     
+       x="Sub-Category", y=expression(Count_of_Returns(~mu~Ah/~mu~s)))
+
+```
+## 2.4: challenges
+
+The main challenges encountered during the process is to identify appropriate functions to use for data pre-processing and plotting.
+Reading through R documentations and online examples help in the process.
+
+# 3.Data preparation and plotting for the second dataset: 'respopagesextod2021.csv'
+
+## 3.1 Import the data
+
+The data is imported using read_csv() function of **readr** package.
+
+```{r}
+data <- read_csv("data/respopagesextod2021.csv")
+```
+
+## 3.2 Plot the Population Pyramid
+
+From the summary, the maximum and minimum population value by age group
+can be observed for both gender.
+This information is used to specify the scale of the y-axis in the population pyramid
+
+```{r}
+data$pop_males <- ifelse(data$Sex == "Males", data$Pop, 0)
+data$pop_females <- ifelse(data$Sex == "Females", data$Pop, 0)
+
+data_grouped <- data %>% 
+  group_by(AG) %>% 
+  summarise('Pop_by_AG_Males' = sum(pop_males),
+            'Pop_by_AG_Females' = sum(pop_females)) %>%
+  ungroup()
+
+summary(data_grouped)
+
+```
+
+The population pyramid is plotted using ggplot2.
+
+```{r}
+ggplot(data, aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop)))+
+  geom_col() +
+  scale_y_continuous(breaks = c(-150000,-100000,0,100000,150000), labels = function(br) ifelse(abs(br)>=1000,paste0(abs(br)/1000, "k"),                                                   abs(br)), limits =c(-160000,160000)) +
+  labs(title = "Population Pyramid", x = "Age", y = "Population Count") +
+  coord_flip()
+```
+
+## 3.4: challenges
+The main challenge is to adjust the label for the population as the values shown for "MALES" are negative at first.
+The changes are made by adding conditions for the argument 'label' such that absolute values are taken.
+

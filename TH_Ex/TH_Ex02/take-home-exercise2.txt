@@ -1,0 +1,3 @@
+netlify: https://qyva.netlify.app/th_ex/th_ex02/take-home-exercise02
+
+github: https://github.com/qiyunhe/VA/blob/master/TH_Ex/TH_Ex02/take-home-exercise02.Rmd

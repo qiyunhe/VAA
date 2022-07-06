@@ -1,0 +1,126 @@
+---
+title: "Finance Project Presentation"
+description: |
+  Power point slides for finance project presentation
+author:
+  - name: He Qiyun 
+    url: https://example.com/norajones
+    affiliation: SMU MITB (AI)
+    affiliation_url: https://scis.smu.edu.sg/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+**The project choose two stocks for analysis: **
+
+ 1. Contemporary Amperex Technology Co., Ltd (CATL) 
+ 2. Energy Very Endure Energy Co., Ltd. (EVE) 
+ 
+**The analysis is divided into three parts:**
+
+  1. Introduction(company products and competitive advantages)
+  
+  ![](intro.png){width=80%}
+  
+  2. Macroeconomic analysis
+  
+  ![](macro.png){width=70%}
+  
+  3. Financial Analysis
+  
+    I'm in charge of financial analysis and will describe the slides made for the 
+    presentation as shown below.
+
+**Financial Analysis**
+
+Financial statement information from year 2017-2020 are collected from eastmoney app 
+as well as annual reports that can be found and downloaded from website:
+http://www.cninfo.com.cn/new/index
+
+Information are collected and calculated using excel, graphs are then plotted
+using Tableau for easier viewing.
+
+Overall, both company presents healthy financial statements,indicating high growth potential.
+
+**1. Asset**
+
+  + Looking at asset information gives us an idea of the company size and growth potential.
+     + Bars representing the absolute value of asset in billion and percentage shows the 
+       % growth from previous year.
+     + CATL is much larger in company size than EVE.
+     + Both companies show positive growth rate over the year.
+     + Growth rate is increasing in general, indicating high growth potential.
+
+    ![](2.png){width=60%}
+
+**2. Liability**
+
+  + Looking at liability information to understand if the company has insolvency risk.
+     + Liabilities 1
+       + Total Liabilities: 
+         + CATL has higher liability than EVE, this is not suprising considering its much larger 
+            asset volume.
+       + Liability-Asset ratio:
+         + Both companies has a positive ratio in a healthy range of 35%-65%.
+       + Current ratio:
+         + Both companies has a positive ratio >1.
+
+       ![](liabilities1.png){width=60%} 
+   + Liabilities 2
+     + Cash and cash equivalents & cash/total assets
+       + Both companies have positive cash, with CATL having higher % of assets in cash,
+        indicating higher debt-paying ability.
+     + Cash and cash equivalents - interest bearing liabilities
+       + Same as above, with higher value, CATL has lower default risk.
+       
+      ![](liabilities2.png){width=60%} 
+   
+**3. Product**
+   
+   + Price Negotiation Power
+     + Difference
+       + Difference = (Accounts payable + Advanced Payment Received)  - (Accounts Receivable + Advanced Payment)
+       + Positive value suggests that the company's product is competitive, giving it a higher price negotiation power
+       + CATL has a much larger positive value than EVE, this makes sense as it is the leading company in the industry.
+     + Accounts Receivable/Total Asset
+       + This percentage should not be very high as a high value means that the company may have difficulty selling
+         its product, suggesting lower product competitiveness.
+       + The percentage for both company are low, below 20%.
+       + EVE has a higher percentage, indicating lower product competitiveness.
+       
+       ![](price_negotiation.png){width=60%}  
+
+   + Profit margin and cost management
+      + Gross Profit Margin
+        + CATL's gross profit margin is slowly decreasing over the year while
+          EVE has slightly increasing value from 2018 onwards.
+        + EVE's value is higher than CATL from 2019 onwards.
+      + Costs(%)
+        + Cost of research, sales and management / Total Revenue * 100%
+        + Lower percentage value means better cost ability.
+        + Both companies have low percentages that are slowly decreasing over the years.
+        
+        ![](cost.png){width=60%}  
+
+**4. Net Profit**
+
+   + Profit for parent company's owners
+      + Net Profit
+        + Both companies have positive increasing values from 2018 onwards.
+        + The values for CATL is much higher than EVE.
+
+       ![](5.png){width=60%} 
+
+**5. Other Ratios**
+
+   + P/E
+     + The high values indicate that both companies are overvalued.
+   + ROE
+     + EVE has higher ROE than CATL from 2018 onwards, this is a bit suprising given CATL's better
+       performance in other areas.
+     
+     ![](7.png){width=60%} 

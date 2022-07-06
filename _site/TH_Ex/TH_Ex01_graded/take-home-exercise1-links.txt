@@ -1,0 +1,4 @@
+
+netlify: https://qyva.netlify.app/th_ex/th_ex01_graded/take-home-exercise1
+
+github: https://github.com/qiyunhe/VA/blob/master/TH_Ex/TH_Ex01_graded/take-home-exercise1.Rmd

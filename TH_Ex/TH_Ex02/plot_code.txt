@@ -1,0 +1,48 @@
+using subplot: 
+```{r}
+d<- highlight_key(data_filtered)
+p1 <-ggplot(filter(data_filtered,PA == "Bedok"), aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop),
+                 tooltip = Pop,frame = Time))+
+  geom_col(position = "identity") +
+  scale_y_continuous(labels = abs, limits = max(data_filtered$Pop) * c(-1,1)) +
+  scale_x_discrete(breaks=data_filtered$AG)+
+  labs(title = "Population Pyramid", x = "Age", y = "Population Count") +
+  coord_flip() +
+  facet_grid(rows = vars(PA)) + theme(legend.position = 'None')
+
+p2 <- ggplot(filter(data_filtered,PA == "Tampines"), aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop),
+                 tooltip = Pop,frame = Time))+
+  geom_col(position = "identity") +
+  scale_y_continuous(labels = abs, limits = max(data_filtered$Pop) * c(-1,1)) +
+  scale_x_discrete(breaks=data_filtered$AG)+
+  labs(title = "Population Pyramid", x = "Age", y = "Population Count") +
+  coord_flip() + 
+ facet_grid(rows = vars(PA))+ theme(legend.position = 'None')
+
+p3 <- ggplot(filter(data_filtered,PA == "Jurong West"), aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop),
+                 tooltip = Pop,frame = Time))+
+  geom_col(position = "identity") +
+  scale_y_continuous(labels = abs, limits = max(data_filtered$Pop) * c(-1,1)) +
+  scale_x_discrete(breaks=data_filtered$AG)+
+  labs(title = "Population Pyramid", x = "Age", y = "Population Count") +
+  coord_flip() + 
+  facet_grid(rows = vars(PA), scales = "free_x", space = "free_x")
+subplot(ggplotly(p1),ggplotly(p2),ggplotly(p3),shareY = T,margin = 0.025,nrows = 3)
+```
+
+using ggplotly:
+```{r}
+p <- ggplot(data_filtered, aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop),
+                 tooltip = Pop,frame = Time))+
+  geom_col(position = "identity") +
+  scale_y_continuous(labels = abs, limits = max(data_filtered$Pop) * c(-1,1)) +
+  scale_x_discrete(breaks=data_filtered$AG)+
+  labs(title = "Population Pyramid", x = "Age", y = "Population Count") +
+  coord_flip() +
+  facet_grid(rows = vars(PA)) 
+ggplotly(p)
+``` 

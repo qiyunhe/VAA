@@ -1,0 +1,135 @@
+---
+title: "Take Home Exercise 2"
+description: |
+  Interactive Population Pyramid by Planning Areas
+author:
+  - name: He Qiyun 
+    url: https://example.com/norajones
+    affiliation: SMU MITB (AI)
+    affiliation_url: https://scis.smu.edu.sg/
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+
+This exercise aims to plot interactive population pyramids on a planning area level from year 2000-2010.
+
+Import the packages needed.
+
+```{r}
+packages = c('tidyverse','readxl','dplyr','ggplot2','plotly','gganimate','ggiraph')
+for(p in packages){
+ if(!require(p, character.only = T)){
+  install.packages(p)
+ }
+ library(p,character.only = T)
+ }
+```
+## 1.1. Sketch 
+
+Below is a sketch of the population pyramids by planning areas.
+
+![Sketch](C:\qiyunhe\VA\TH_Ex\TH_Ex02\sketch.jpg){fig.width=30%,fig.height=30%}
+
+# 2. Data Exploration and preparation
+
+Import both population data
+The data is imported using read_csv() function of **readr** package.
+It can be observed that both datasets have same columns, hence, can be combined.
+
+```{r}
+data0010 <- read_csv("respopagesextod2000to2010/respopagesextod2000to2010.csv")
+data1120 <- read_csv("respopagesextod2011to2020/respopagesextod2011to2020.csv")
+```
+
+As the analysis aims to analyse the change of population over the years from 2000 to 2020, the two datasets are combined using **rbind()**.
+
+```{r}
+data <- rbind(data0010, data1120)
+```
+
+Group population by planning area and plot a Pareto chart to inspect the population distribution over planning area.
+User can check the value by moving mouse over to bars or points.
+
+It can be observed from the interactive bar chart that some planning areas are having 0 population.
+It can also be observed that more than 50% of the population comes from the top 9 planning areas ordered by total population count.
+The focus will be on these 9 planning areas.
+
+```{r}
+data_grouped_pa <- data %>%
+  group_by(PA)%>%
+  summarise(
+    count_by_pa = sum(Pop, na.rm = TRUE)) 
+
+#order the data and add the cumulative percentage column
+data_grouped_pa <- data_grouped_pa[order(data_grouped_pa$count_by_pa, decreasing=TRUE),]
+
+data_grouped_pa$cumulative <- cumsum(data_grouped_pa$count_by_pa)/sum(data_grouped_pa$count_by_pa) * 100
+
+#create the scale on secondary y-axis
+scale <- tail(data_grouped_pa$cumulative, n=1)/head(data_grouped_pa$count_by_pa, n=1)
+
+
+p <- ggplot(data_grouped_pa,
+            aes(x = reorder(PA, -count_by_pa),y = count_by_pa,  
+                 tooltip=count_by_pa)) +
+  geom_bar_interactive(stat = "identity", color="black", fill = 'light blue') + 
+  geom_path_interactive(aes(y=cumulative/scale, group=1),colour="red", size=0.9) +
+  geom_point_interactive(aes(y=cumulative/scale, group=1,tooltip = cumulative),colour="red") +
+  scale_y_continuous(
+    # Features of the first y-axis
+    name = "Population Count",
+    # Add second y-axis and specify its features
+    sec.axis = sec_axis(~ .*scale, name="% of Total Running Sum of Population Count")
+  ) + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  labs(title="Pareto Chart", subtitle="Count of Population by planning area",     
+       x="Planning Area", y=expression(count_by_pa(~mu~Ah/~mu~s)))
+
+
+girafe(ggobj = p,width_svg = 7,
+       height_svg = 6)
+```
+
+Filter the data for the top 9 planning areas with the most population amount.
+
+```{r}
+filter_list <- data_grouped_pa$PA[1:9]
+print(filter_list)
+data_filtered <- filter(data, PA %in% filter_list)
+
+data_filtered$PopPercent <- data_filtered$Pop/sum(data_filtered$Pop) * 100
+```
+
+# 3. Plot the population pyramid for the 9 planning areas
+Tooltip will display information about population count, age group, year and gender     when the mouse is over a bar.
+At the bottom of the chart, user can click play to see the evolution of population 
+for each planning area over the years.
+
+```{r}
+p <- ggplot(data_filtered, aes(x = AG, fill = Sex,
+                 y = ifelse(test = Sex == "Males", yes = -Pop, no = Pop),frame = 
+                    Time,text = paste0("Population:", Pop,"\n",
+                                       "Age group:",AG,"\n",
+                                       "Year:", Time,"\n",
+                                       "Gender:", Sex)))+
+  geom_col(position = "identity") +
+  scale_y_continuous(labels = abs, limits = max(data_filtered$Pop) * c(-1,1)) +
+  scale_x_discrete(breaks=data_filtered$AG)+
+  labs(title = "Population Pyramids", x = "Age", y = "Population Count") +
+  coord_flip() + theme(legend.position = "none") +
+  facet_wrap(~PA) 
+  
+ggplotly(p,tooltip = "text",autosize = FALSE,width = 700, height = 900)
+``` 
+
+# 4. Challenges
+
+Subplots of population pyramid are squeezed together, making it unclear to read as the axis labels overlapped each other. The main challenge is to find ways to resize the plot.
+layout() is used for the resizing, with autosize = FALSE, width = 700 and height = 900
+
