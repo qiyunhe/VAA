@@ -8,3 +8,22 @@ description: |
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+**Visual Analytics**
+
++ Three take-home exercises:
+  + Graphs plotted using R
+     
++ Two DataVis MakeOver assignments  
+
+  + Done using Tableau
+  + Given a graph, critiques are made and improvements are 
+    implemented.
+  + Step by step guide on creating the new design.
+  + Link for new design on Tableau Public is available.
+  
+**Finance**
+
++ Group project for finance
+  + Analysis of two stocks in China's new energy market.
+  + Presented financial statement analysis using excel and Tableau.
+  

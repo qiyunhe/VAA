@@ -4,9 +4,26 @@ description: |
   My Website
 output_dir: "_site"
 navbar:
-  right:
+  left:
     - text: "Home"
-      href: index.html
+      href: about.html
     - text: "About"
       href: about.html
+    - text: "Visual Analytics"   
+      menu:
+      - text: "R: Pareto chart & Population Pyramid"
+        href: "TH_Ex/TH_Ex01_graded/take-home-exercise1.html"
+      - text: "R: Interactive Population Pyramid"
+        href: "TH_Ex/TH_Ex02/take-home-exercise02.html"
+      - text: "R: Interactive Funnel plot" 
+        href: "TH_Ex/TH_Ex03/exercise3.html"
+      - text: "Tableau: DataViz Makeover 1"
+        href: "DataVisMakeOver/1/DataVisMakeOver1.html"
+      - text: "Tableau: DataViz Makeover 2"  
+        href: "DataVisMakeOver/2/DataVisMakeOver2.html"
+    - text: "Finance"
+      menu:
+      - text: "Finance project"
+        href: "finance/Finance.html"
+
 output: distill::distill_article

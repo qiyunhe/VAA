@@ -5,8 +5,8 @@
       "title": "About this site",
       "description": "Some additional details about the website",
       "author": [],
-      "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-07-06T21:39:06+08:00"
+      "contents": "\r\nVisual Analytics\r\nThree take-home exercises:\r\nGraphs plotted using R\r\n\r\nTwo DataVis MakeOver assignments\r\nDone using Tableau\r\nGiven a graph, critiques are made and improvements are implemented.\r\nStep by step guide on creating the new design.\r\nLink for new design on Tableau Public is available.\r\n\r\nFinance\r\nGroup project for finance\r\nAnalysis of two stocks in China’s new energy market.\r\nPresented financial statement analysis using excel and Tableau.\r\n\r\n\r\n\r\n\r\n",
+      "last_modified": "2022-07-06T21:52:34+08:00"
     },
     {
       "path": "index.html",
@@ -14,7 +14,7 @@
       "description": "Welcome to the website. I hope you enjoy it!\n",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-07-06T21:39:07+08:00"
+      "last_modified": "2022-07-06T21:53:57+08:00"
     }
   ],
   "collections": []
