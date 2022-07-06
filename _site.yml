@@ -1,14 +1,10 @@
 name: "VAA"
-title: "My Website"
+title: "SMU Course Works"
 description: |
   My Website
 output_dir: "_site"
 navbar:
   left:
-    - text: "Home"
-      href: about.html
-    - text: "About"
-      href: about.html
     - text: "Visual Analytics"   
       menu:
       - text: "R: Pareto chart & Population Pyramid"

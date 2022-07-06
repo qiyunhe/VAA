@@ -29,6 +29,7 @@ Next section will focus on critiques of the original  visualization based on cla
 
 The overall approach is to use the four quadrant to critique the graphs, as well as 
 including improvements that can be made to improve interactivity.
+
 ![](38.png){width=30%}
 
 ## 1.1. Critiques: Clarity       

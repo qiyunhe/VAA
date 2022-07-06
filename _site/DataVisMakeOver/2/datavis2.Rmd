@@ -22,11 +22,14 @@ at the planning sub-zone level of January 2022.
 
 ![original_design](original_design.png){width=60%}
 
+
+
 A good visualization should be both clear and visually appealing.           
 Next section will focus on critiques of the original  visualization based on clarity and aesthetics. 
 
 The overall approach is to use the four quadrant to critique the graphs, as well as 
 including improvements that can be made to improve interactivity.
+
 ![](38.png){width=30%}
 
 ## 1.1. Critiques: Clarity       
