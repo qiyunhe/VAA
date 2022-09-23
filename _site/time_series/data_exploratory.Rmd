@@ -1,0 +1,186 @@
+---
+title: "Topic 1: Time series data visualization"
+output:
+  html_document:
+    toc: true
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Import packages, read in data and preprocess data
+
+Import packages.
+
+Lubridate: package designed to take care of datetime field
+
+```{r}
+pacman::p_load(tidyverse, lubridate, zoo, 
+               timetk, modeltime, 
+               trelliscopejs, seasonal,
+               tsibble, feasts, fable)
+``` 
+
+Read in data.
+
+The data contains information about monthly tourist arrival from different countries from 2008-2019
+Variable 'Month-YEAR' is of type 'chr', thus need to tidy it for further processing.
+
+```{r}
+ts_data <- read_csv(
+"visitor_arrivals_by_air.csv")
+```
+
+Convert 'Month-Year' to 'Date' type.
+
+'ts_data' is a tibble data frame.
+
+```{r}
+#Dash or slash in the original data can be handled
+ts_data$`Month-Year` <- dmy(
+ts_data$`Month-Year`)
+```
+
+Create a new column called 'Month' from 'Month-Year' column.
+
+Convert the tibble data frame into tsibble data frame.
+
+Set 'Month' as the index.
+
+```{r}
+
+ts_tsibble <- ts_data %>%
+mutate(Month = yearmonth(`Month-Year`)) %>%
+as_tsibble(index = `Month`)
+```
+
+Transpose all columns 2-34 to one column named 'Country'
+
+```{r}
+
+ts_longer <- ts_data %>%
+pivot_longer(cols = c(2:34),
+names_to = "Country",
+values_to = "Arrivals")
+```
+
+# 2. Explore data using visualization
+
+## 2.1. Time-series Line Graph
+
+To get a view of the general pattern, let's start with a time-series plot with observations plotted against chosen time units.
+
+This allows for checking of any patterns: linear, seasonality or cyclic
+
+For interactivity, plot the graph using 'timetk'.
+
+Taking for example, the country Vietnam, below displays its time-series plot.
+
+The observations are:
+
+  + Increasing trend over the years.
+  + Strong seasonal pattern with values increasing from June         and peaks in July each year.
+  + No cyclic behaviour observed.
+  
+```{r}
+ts_longer %>%
+filter(Country == "Vietnam") %>%
+plot_time_series(`Month-Year`, Arrivals,
+.line_size = 0.4,
+.smooth_size = 0.4,
+.interactive = TRUE,
+.plotly_slider = TRUE)
+
+```
+
+To enable visualization of multiple time-series patterns from different countries at the same time, plot multiple time-series subplots using 'timetk'.
+
+```{r}
+ts_longer %>%
+group_by(Country) %>%
+plot_time_series(
+  `Month-Year`, Arrivals,
+  .line_size = 0.4,
+  .facet_ncol = 5,
+  .facet_nrow = 2,
+  .facet_scales = "free_y",
+  .interactive = TRUE,
+  .smooth_size = 0.4,
+  .trelliscope = TRUE,
+  .trelliscope_params = list(
+  width = 600,
+  height = 700,
+  path= "trellis/")
+)
+
+```
+
+## 2.2. Box Plots 
+
+To detect seasonal patterns over different time units.
+
+Allow for the observation of distributions of arrival numbers over different time units (months, quarters or years).
+
+```{r}
+ts_longer %>%
+filter(Country == "Vietnam"|
+       Country == 'Germany') %>%
+group_by(Country) %>%
+plot_seasonal_diagnostics(
+`Month-Year`, Arrivals,
+.interactive = TRUE)
+```
+
+## 2.3. Seasonal Plots
+
+To further explore the underlying seasonal patterns, plot data from each year.
+
+Enable comparison of seasonality across years.
+
+From the plot below, taking the country 'Vietnam' as a example, it is clear that the arrivals increases from year to year, and with each year, the arrivals increase from January onward, peaks in July, then starts to decrease. These are in accordance with the observations obtained from the time-series line graph.
+
+```{r}
+tsibble_longer <- ts_tsibble %>%
+pivot_longer(cols = c(2:34),
+names_to = "Country",
+values_to = "Arrivals")
+
+#will look for the index column as x-axis
+tsibble_longer %>%
+filter(Country == "Vietnam" |
+       Country == "Germany") %>%
+gg_season(Arrivals)
+```
+
+## 2.4. Seasonal subseries plots
+
+Plot arrivals for each season(month) across all years.
+
+Allows seasonal patterns to be observed more closely within each month.
+
+Blue line indicates the mean.
+
+For Vietnam, a general increasing trend is observed for each month across all years, with July having the highest mean number of arrivals.
+
+```{r}
+
+tsibble_longer %>%
+filter(Country == "Vietnam" |
+Country == "Germany") %>%
+gg_subseries(Arrivals)
+
+```
+
+
+
+References: 
+
++ https://r4dsa-tsaf.netlify.app/topic/topic1#1
++ https://otexts.com/fpp3/graphics.html
+
+
+
+
+

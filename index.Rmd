@@ -26,6 +26,13 @@ knitr::opts_chunk$set(echo = FALSE)
   + Step by step guide on creating the new design.
   + Link for new design on Tableau Public is available.
   
+**Time Series Analysis**
+
++ Meetup sessions conducted by Visual Analytics Professor. (update in progress)
+
++ Time series data exploratory using graphs
+   + line graph, box plot, seasonal plot, seasonal subseries plot.
+
 **Finance**
 
 + Group project for finance

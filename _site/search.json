@@ -6,15 +6,15 @@
       "description": "Some additional details about the website",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-07-06T23:36:53+08:00"
+      "last_modified": "2022-09-23T17:35:25+08:00"
     },
     {
       "path": "index.html",
       "title": "Welcome to my portfolio",
       "description": "This website contains a collection of works done in SMU\n",
       "author": [],
-      "contents": "\r\nVisual Analytics\r\nThree take-home exercises:\r\nGraphs plotted using R\r\n\r\nTwo DataVis MakeOver assignments\r\nDone using Tableau\r\nGiven a graph, critiques are made and improvements are implemented.\r\nStep by step guide on creating the new design.\r\nLink for new design on Tableau Public is available.\r\n\r\nFinance\r\nGroup project for finance\r\nAnalysis of two stocks in China’s new energy market.\r\nPresented financial statement analysis using excel and Tableau.\r\n\r\n",
-      "last_modified": "2022-07-06T23:36:54+08:00"
+      "contents": "\r\nVisual Analytics\r\nThree take-home exercises:\r\nGraphs plotted using R\r\n\r\nTwo DataVis MakeOver assignments\r\nDone using Tableau\r\nGiven a graph, critiques are made and improvements are\r\nimplemented.\r\nStep by step guide on creating the new design.\r\nLink for new design on Tableau Public is available.\r\n\r\nTime Series Analysis\r\nMeetup sessions conducted by Visual Analytics Professor. (update in progress)\r\nTime series data exploratory using graphs\r\nline graph, box plot, seasonal plot, seasonal subseries plot.\r\n\r\nFinance\r\nGroup project for finance\r\nAnalysis of two stocks in China’s new energy market.\r\nPresented financial statement analysis using excel and Tableau.\r\n\r\n",
+      "last_modified": "2022-09-23T17:35:26+08:00"
     }
   ],
   "collections": []

@@ -17,6 +17,10 @@ navbar:
         href: "DataVisMakeOver/1/DataVisMakeOver1.html"
       - text: "Tableau: DataViz Makeover 2"  
         href: "DataVisMakeOver/2/DataVisMakeOver2.html"
+    - text: "Time Series Analysis"
+      menu:
+      - text: "Data Exploratory"
+        href: "time_series/data_exploratory.html"
     - text: "Finance"
       menu:
       - text: "Finance project"
